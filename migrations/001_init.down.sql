@@ -1,0 +1,8 @@
+BEGIN;
+
+DROP TABLE IF EXISTS transactions;
+DROP TABLE IF EXISTS user_inventory;
+DROP TABLE IF EXISTS merch_items;
+DROP TABLE IF EXISTS users;
+
+COMMIT;
