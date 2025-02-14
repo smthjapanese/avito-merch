@@ -2,10 +2,9 @@ package main
 
 import (
 	"github.com/joho/godotenv"
+	"github.com/smthjapanese/avito-merch/config"
+	"github.com/smthjapanese/avito-merch/internal/app"
 	"log"
-
-	"github.com/evrone/go-clean-template/config"
-	"github.com/evrone/go-clean-template/internal/app"
 )
 
 func main() {

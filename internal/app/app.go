@@ -3,21 +3,19 @@ package app
 
 import (
 	"fmt"
+	"github.com/smthjapanese/avito-merch/config"
+	v1 "github.com/smthjapanese/avito-merch/internal/controller/http/v1"
+	"github.com/smthjapanese/avito-merch/internal/usecase"
+	"github.com/smthjapanese/avito-merch/internal/usecase/repo"
+	"github.com/smthjapanese/avito-merch/internal/usecase/webapi"
+	"github.com/smthjapanese/avito-merch/pkg/httpserver"
+	"github.com/smthjapanese/avito-merch/pkg/logger"
+	"github.com/smthjapanese/avito-merch/pkg/postgres"
 	"os"
 	"os/signal"
 	"syscall"
 
 	"github.com/gin-gonic/gin"
-
-	"github.com/evrone/go-clean-template/config"
-
-	v1 "github.com/evrone/go-clean-template/internal/controller/http/v1"
-	"github.com/evrone/go-clean-template/internal/usecase"
-	"github.com/evrone/go-clean-template/internal/usecase/repo"
-	"github.com/evrone/go-clean-template/internal/usecase/webapi"
-	"github.com/evrone/go-clean-template/pkg/httpserver"
-	"github.com/evrone/go-clean-template/pkg/logger"
-	"github.com/evrone/go-clean-template/pkg/postgres"
 )
 
 // Run creates objects via constructors.

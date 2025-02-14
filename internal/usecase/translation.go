@@ -3,8 +3,7 @@ package usecase
 import (
 	"context"
 	"fmt"
-
-	"github.com/evrone/go-clean-template/internal/entity"
+	"github.com/smthjapanese/avito-merch/internal/entity"
 )
 
 // TranslationUseCase -.

@@ -6,10 +6,11 @@ package usecase_test
 
 import (
 	context "context"
-	"github.com/smthjapanese/avito-merch/internal/entity"
 	reflect "reflect"
 
 	gomock "github.com/golang/mock/gomock"
+	entity "github.com/smthjapanese/avito-merch/internal/entity"
+	usecase "github.com/smthjapanese/avito-merch/internal/usecase"
 )
 
 // MockTranslation is a mock of Translation interface.
@@ -153,4 +154,392 @@ func (m *MockTranslationWebAPI) Translate(arg0 entity.Translation) (entity.Trans
 func (mr *MockTranslationWebAPIMockRecorder) Translate(arg0 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Translate", reflect.TypeOf((*MockTranslationWebAPI)(nil).Translate), arg0)
+}
+
+// MockUser is a mock of User interface.
+type MockUser struct {
+	ctrl     *gomock.Controller
+	recorder *MockUserMockRecorder
+}
+
+// MockUserMockRecorder is the mock recorder for MockUser.
+type MockUserMockRecorder struct {
+	mock *MockUser
+}
+
+// NewMockUser creates a new mock instance.
+func NewMockUser(ctrl *gomock.Controller) *MockUser {
+	mock := &MockUser{ctrl: ctrl}
+	mock.recorder = &MockUserMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockUser) EXPECT() *MockUserMockRecorder {
+	return m.recorder
+}
+
+// BeginTx mocks base method.
+func (m *MockUser) BeginTx(ctx context.Context) (usecase.Transaction, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "BeginTx", ctx)
+	ret0, _ := ret[0].(usecase.Transaction)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// BeginTx indicates an expected call of BeginTx.
+func (mr *MockUserMockRecorder) BeginTx(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "BeginTx", reflect.TypeOf((*MockUser)(nil).BeginTx), ctx)
+}
+
+// BuyMerch mocks base method.
+func (m *MockUser) BuyMerch(ctx context.Context, userID int64, merchName string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "BuyMerch", ctx, userID, merchName)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// BuyMerch indicates an expected call of BuyMerch.
+func (mr *MockUserMockRecorder) BuyMerch(ctx, userID, merchName interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "BuyMerch", reflect.TypeOf((*MockUser)(nil).BuyMerch), ctx, userID, merchName)
+}
+
+// GetInfo mocks base method.
+func (m *MockUser) GetInfo(ctx context.Context, userID int64) (*entity.InfoResponse, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetInfo", ctx, userID)
+	ret0, _ := ret[0].(*entity.InfoResponse)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetInfo indicates an expected call of GetInfo.
+func (mr *MockUserMockRecorder) GetInfo(ctx, userID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetInfo", reflect.TypeOf((*MockUser)(nil).GetInfo), ctx, userID)
+}
+
+// Login mocks base method.
+func (m *MockUser) Login(ctx context.Context, username, password string) (string, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Login", ctx, username, password)
+	ret0, _ := ret[0].(string)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// Login indicates an expected call of Login.
+func (mr *MockUserMockRecorder) Login(ctx, username, password interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Login", reflect.TypeOf((*MockUser)(nil).Login), ctx, username, password)
+}
+
+// Register mocks base method.
+func (m *MockUser) Register(ctx context.Context, username, password string) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Register", ctx, username, password)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Register indicates an expected call of Register.
+func (mr *MockUserMockRecorder) Register(ctx, username, password interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Register", reflect.TypeOf((*MockUser)(nil).Register), ctx, username, password)
+}
+
+// SendCoins mocks base method.
+func (m *MockUser) SendCoins(ctx context.Context, fromUserID int64, toUser string, amount int64) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "SendCoins", ctx, fromUserID, toUser, amount)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// SendCoins indicates an expected call of SendCoins.
+func (mr *MockUserMockRecorder) SendCoins(ctx, fromUserID, toUser, amount interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "SendCoins", reflect.TypeOf((*MockUser)(nil).SendCoins), ctx, fromUserID, toUser, amount)
+}
+
+// MockRepository is a mock of Repository interface.
+type MockRepository struct {
+	ctrl     *gomock.Controller
+	recorder *MockRepositoryMockRecorder
+}
+
+// MockRepositoryMockRecorder is the mock recorder for MockRepository.
+type MockRepositoryMockRecorder struct {
+	mock *MockRepository
+}
+
+// NewMockRepository creates a new mock instance.
+func NewMockRepository(ctrl *gomock.Controller) *MockRepository {
+	mock := &MockRepository{ctrl: ctrl}
+	mock.recorder = &MockRepositoryMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockRepository) EXPECT() *MockRepositoryMockRecorder {
+	return m.recorder
+}
+
+// AddToInventory mocks base method.
+func (m *MockRepository) AddToInventory(ctx context.Context, userID, itemID int64) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "AddToInventory", ctx, userID, itemID)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// AddToInventory indicates an expected call of AddToInventory.
+func (mr *MockRepositoryMockRecorder) AddToInventory(ctx, userID, itemID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "AddToInventory", reflect.TypeOf((*MockRepository)(nil).AddToInventory), ctx, userID, itemID)
+}
+
+// BeginTx mocks base method.
+func (m *MockRepository) BeginTx(ctx context.Context) (usecase.Transaction, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "BeginTx", ctx)
+	ret0, _ := ret[0].(usecase.Transaction)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// BeginTx indicates an expected call of BeginTx.
+func (mr *MockRepositoryMockRecorder) BeginTx(ctx interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "BeginTx", reflect.TypeOf((*MockRepository)(nil).BeginTx), ctx)
+}
+
+// CreateTransaction mocks base method.
+func (m *MockRepository) CreateTransaction(ctx context.Context, tr *entity.Transaction) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateTransaction", ctx, tr)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// CreateTransaction indicates an expected call of CreateTransaction.
+func (mr *MockRepositoryMockRecorder) CreateTransaction(ctx, tr interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateTransaction", reflect.TypeOf((*MockRepository)(nil).CreateTransaction), ctx, tr)
+}
+
+// CreateUser mocks base method.
+func (m *MockRepository) CreateUser(ctx context.Context, user *entity.User) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateUser", ctx, user)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// CreateUser indicates an expected call of CreateUser.
+func (mr *MockRepositoryMockRecorder) CreateUser(ctx, user interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateUser", reflect.TypeOf((*MockRepository)(nil).CreateUser), ctx, user)
+}
+
+// GetMerchByName mocks base method.
+func (m *MockRepository) GetMerchByName(ctx context.Context, name string) (*entity.MerchItem, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetMerchByName", ctx, name)
+	ret0, _ := ret[0].(*entity.MerchItem)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetMerchByName indicates an expected call of GetMerchByName.
+func (mr *MockRepositoryMockRecorder) GetMerchByName(ctx, name interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetMerchByName", reflect.TypeOf((*MockRepository)(nil).GetMerchByName), ctx, name)
+}
+
+// GetUserByID mocks base method.
+func (m *MockRepository) GetUserByID(ctx context.Context, id int64) (*entity.User, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetUserByID", ctx, id)
+	ret0, _ := ret[0].(*entity.User)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetUserByID indicates an expected call of GetUserByID.
+func (mr *MockRepositoryMockRecorder) GetUserByID(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUserByID", reflect.TypeOf((*MockRepository)(nil).GetUserByID), ctx, id)
+}
+
+// GetUserByUsername mocks base method.
+func (m *MockRepository) GetUserByUsername(ctx context.Context, username string) (*entity.User, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetUserByUsername", ctx, username)
+	ret0, _ := ret[0].(*entity.User)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetUserByUsername indicates an expected call of GetUserByUsername.
+func (mr *MockRepositoryMockRecorder) GetUserByUsername(ctx, username interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUserByUsername", reflect.TypeOf((*MockRepository)(nil).GetUserByUsername), ctx, username)
+}
+
+// GetUserInventory mocks base method.
+func (m *MockRepository) GetUserInventory(ctx context.Context, userID int64) ([]*entity.UserInventory, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetUserInventory", ctx, userID)
+	ret0, _ := ret[0].([]*entity.UserInventory)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetUserInventory indicates an expected call of GetUserInventory.
+func (mr *MockRepositoryMockRecorder) GetUserInventory(ctx, userID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUserInventory", reflect.TypeOf((*MockRepository)(nil).GetUserInventory), ctx, userID)
+}
+
+// GetUserTransactions mocks base method.
+func (m *MockRepository) GetUserTransactions(ctx context.Context, userID int64) ([]*entity.Transaction, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetUserTransactions", ctx, userID)
+	ret0, _ := ret[0].([]*entity.Transaction)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetUserTransactions indicates an expected call of GetUserTransactions.
+func (mr *MockRepositoryMockRecorder) GetUserTransactions(ctx, userID interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUserTransactions", reflect.TypeOf((*MockRepository)(nil).GetUserTransactions), ctx, userID)
+}
+
+// UpdateUserCoins mocks base method.
+func (m *MockRepository) UpdateUserCoins(ctx context.Context, userID, amount int64) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateUserCoins", ctx, userID, amount)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UpdateUserCoins indicates an expected call of UpdateUserCoins.
+func (mr *MockRepositoryMockRecorder) UpdateUserCoins(ctx, userID, amount interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateUserCoins", reflect.TypeOf((*MockRepository)(nil).UpdateUserCoins), ctx, userID, amount)
+}
+
+// MockTransaction is a mock of Transaction interface.
+type MockTransaction struct {
+	ctrl     *gomock.Controller
+	recorder *MockTransactionMockRecorder
+}
+
+// MockTransactionMockRecorder is the mock recorder for MockTransaction.
+type MockTransactionMockRecorder struct {
+	mock *MockTransaction
+}
+
+// NewMockTransaction creates a new mock instance.
+func NewMockTransaction(ctrl *gomock.Controller) *MockTransaction {
+	mock := &MockTransaction{ctrl: ctrl}
+	mock.recorder = &MockTransactionMockRecorder{mock}
+	return mock
+}
+
+// EXPECT returns an object that allows the caller to indicate expected use.
+func (m *MockTransaction) EXPECT() *MockTransactionMockRecorder {
+	return m.recorder
+}
+
+// Commit mocks base method.
+func (m *MockTransaction) Commit() error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Commit")
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Commit indicates an expected call of Commit.
+func (mr *MockTransactionMockRecorder) Commit() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Commit", reflect.TypeOf((*MockTransaction)(nil).Commit))
+}
+
+// CreateTransaction mocks base method.
+func (m *MockTransaction) CreateTransaction(ctx context.Context, tr *entity.Transaction) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "CreateTransaction", ctx, tr)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// CreateTransaction indicates an expected call of CreateTransaction.
+func (mr *MockTransactionMockRecorder) CreateTransaction(ctx, tr interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "CreateTransaction", reflect.TypeOf((*MockTransaction)(nil).CreateTransaction), ctx, tr)
+}
+
+// GetUserByID mocks base method.
+func (m *MockTransaction) GetUserByID(ctx context.Context, id int64) (*entity.User, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetUserByID", ctx, id)
+	ret0, _ := ret[0].(*entity.User)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetUserByID indicates an expected call of GetUserByID.
+func (mr *MockTransactionMockRecorder) GetUserByID(ctx, id interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUserByID", reflect.TypeOf((*MockTransaction)(nil).GetUserByID), ctx, id)
+}
+
+// GetUserByUsername mocks base method.
+func (m *MockTransaction) GetUserByUsername(ctx context.Context, username string) (*entity.User, error) {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "GetUserByUsername", ctx, username)
+	ret0, _ := ret[0].(*entity.User)
+	ret1, _ := ret[1].(error)
+	return ret0, ret1
+}
+
+// GetUserByUsername indicates an expected call of GetUserByUsername.
+func (mr *MockTransactionMockRecorder) GetUserByUsername(ctx, username interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetUserByUsername", reflect.TypeOf((*MockTransaction)(nil).GetUserByUsername), ctx, username)
+}
+
+// Rollback mocks base method.
+func (m *MockTransaction) Rollback() error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "Rollback")
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// Rollback indicates an expected call of Rollback.
+func (mr *MockTransactionMockRecorder) Rollback() *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Rollback", reflect.TypeOf((*MockTransaction)(nil).Rollback))
+}
+
+// UpdateUserCoins mocks base method.
+func (m *MockTransaction) UpdateUserCoins(ctx context.Context, userID, amount int64) error {
+	m.ctrl.T.Helper()
+	ret := m.ctrl.Call(m, "UpdateUserCoins", ctx, userID, amount)
+	ret0, _ := ret[0].(error)
+	return ret0
+}
+
+// UpdateUserCoins indicates an expected call of UpdateUserCoins.
+func (mr *MockTransactionMockRecorder) UpdateUserCoins(ctx, userID, amount interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "UpdateUserCoins", reflect.TypeOf((*MockTransaction)(nil).UpdateUserCoins), ctx, userID, amount)
 }

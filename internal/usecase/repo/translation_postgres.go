@@ -3,9 +3,8 @@ package repo
 import (
 	"context"
 	"fmt"
-
-	"github.com/evrone/go-clean-template/internal/entity"
-	"github.com/evrone/go-clean-template/pkg/postgres"
+	"github.com/smthjapanese/avito-merch/internal/entity"
+	"github.com/smthjapanese/avito-merch/pkg/postgres"
 )
 
 const _defaultEntityCap = 64

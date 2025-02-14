@@ -4,13 +4,11 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/google/uuid"
+	rmqrpc "github.com/smthjapanese/avito-merch/pkg/rabbitmq/rmq_rpc"
+	"github.com/streadway/amqp"
 	"sync"
 	"time"
-
-	"github.com/google/uuid"
-	"github.com/streadway/amqp"
-
-	rmqrpc "github.com/evrone/go-clean-template/pkg/rabbitmq/rmq_rpc"
 )
 
 // ErrConnectionClosed -.

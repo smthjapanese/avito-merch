@@ -5,16 +5,15 @@ import (
 	"errors"
 	"fmt"
 	"github.com/smthjapanese/avito-merch/internal/entity"
-	"github.com/smthjapanese/avito-merch/internal/usecase"
 	"golang.org/x/crypto/bcrypt"
 	"time"
 )
 
 type UserUseCase struct {
-	repo usecase.Repository
+	repo UserRepository
 }
 
-func NewUserUseCase(repo usecase.Repository) *UserUseCase {
+func NewUserUseCase(repo UserRepository) *UserUseCase {
 	return &UserUseCase{
 		repo: repo,
 	}

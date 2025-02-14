@@ -3,13 +3,12 @@ package usecase_test
 import (
 	"context"
 	"errors"
+	"github.com/smthjapanese/avito-merch/internal/entity"
+	"github.com/smthjapanese/avito-merch/internal/usecase"
 	"testing"
 
 	"github.com/golang/mock/gomock"
 	"github.com/stretchr/testify/require"
-
-	"github.com/evrone/go-clean-template/internal/entity"
-	"github.com/evrone/go-clean-template/internal/usecase"
 )
 
 var errInternalServErr = errors.New("internal server error")

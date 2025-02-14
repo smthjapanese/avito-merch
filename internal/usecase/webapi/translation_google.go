@@ -2,10 +2,9 @@ package webapi
 
 import (
 	"fmt"
+	"github.com/smthjapanese/avito-merch/internal/entity"
 
 	translator "github.com/Conight/go-googletrans"
-
-	"github.com/evrone/go-clean-template/internal/entity"
 )
 
 // TranslationWebAPI -.

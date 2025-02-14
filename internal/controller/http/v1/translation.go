@@ -1,13 +1,12 @@
 package v1
 
 import (
+	"github.com/smthjapanese/avito-merch/internal/entity"
+	"github.com/smthjapanese/avito-merch/internal/usecase"
+	"github.com/smthjapanese/avito-merch/pkg/logger"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-
-	"github.com/evrone/go-clean-template/internal/entity"
-	"github.com/evrone/go-clean-template/internal/usecase"
-	"github.com/evrone/go-clean-template/pkg/logger"
 )
 
 type translationRoutes struct {

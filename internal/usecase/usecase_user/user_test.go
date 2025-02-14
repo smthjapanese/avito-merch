@@ -2,117 +2,16 @@ package usecase_user
 
 import (
 	"context"
-	"errors"
 	"github.com/smthjapanese/avito-merch/internal/entity"
-	"github.com/smthjapanese/avito-merch/internal/usecase"
+	"github.com/smthjapanese/avito-merch/internal/usecase/usecase_user/mocks"
+	"github.com/stretchr/testify/mock"
 	"testing"
 	"time"
 )
 
-// MockRepository - мок для Repository
-type MockRepository struct {
-	users        map[int64]*entity.User
-	usersByName  map[string]*entity.User
-	transactions []*entity.Transaction
-	inventory    []*entity.UserInventory
-	merchItems   map[string]*entity.MerchItem
-}
-
-func (m *MockRepository) BeginTx(ctx context.Context) (usecase.Transaction, error) {
-	//TODO implement me
-	panic("implement me")
-}
-
-func NewMockRepository() *MockRepository {
-	return &MockRepository{
-		users:       make(map[int64]*entity.User),
-		usersByName: make(map[string]*entity.User),
-		merchItems:  make(map[string]*entity.MerchItem),
-	}
-}
-
-// Реализация методов мока
-func (m *MockRepository) CreateUser(ctx context.Context, user *entity.User) error {
-	if _, exists := m.usersByName[user.Username]; exists {
-		return errors.New("user already exists")
-	}
-	user.ID = int64(len(m.users) + 1)
-	m.users[user.ID] = user
-	m.usersByName[user.Username] = user
-	return nil
-}
-
-func (m *MockRepository) GetUserByUsername(ctx context.Context, username string) (*entity.User, error) {
-	if user, ok := m.usersByName[username]; ok {
-		return user, nil
-	}
-	return nil, errors.New("user not found")
-}
-
-func (m *MockRepository) GetUserByID(ctx context.Context, id int64) (*entity.User, error) {
-	if user, ok := m.users[id]; ok {
-		return user, nil
-	}
-	return nil, errors.New("user not found")
-}
-
-func (m *MockRepository) UpdateUserCoins(ctx context.Context, userID int64, amount int64) error {
-	user, ok := m.users[userID]
-	if !ok {
-		return errors.New("user not found")
-	}
-	newBalance := user.Coins + amount
-	if newBalance < 0 {
-		return errors.New("insufficient funds")
-	}
-	user.Coins = newBalance
-	return nil
-}
-
-func (m *MockRepository) GetMerchByName(ctx context.Context, name string) (*entity.MerchItem, error) {
-	if merch, ok := m.merchItems[name]; ok {
-		return merch, nil
-	}
-	return nil, errors.New("merch not found")
-}
-
-func (m *MockRepository) AddToInventory(ctx context.Context, userID, itemID int64) error {
-	m.inventory = append(m.inventory, &entity.UserInventory{
-		UserID:   userID,
-		ItemID:   itemID,
-		Quantity: 1,
-	})
-	return nil
-}
-
-func (m *MockRepository) CreateTransaction(ctx context.Context, tr *entity.Transaction) error {
-	m.transactions = append(m.transactions, tr)
-	return nil
-}
-
-func (m *MockRepository) GetUserTransactions(ctx context.Context, userID int64) ([]*entity.Transaction, error) {
-	var userTransactions []*entity.Transaction
-	for _, tr := range m.transactions {
-		if tr.FromUserID == userID || tr.ToUserID == userID {
-			userTransactions = append(userTransactions, tr)
-		}
-	}
-	return userTransactions, nil
-}
-
-func (m *MockRepository) GetUserInventory(ctx context.Context, userID int64) ([]*entity.UserInventory, error) {
-	var userInventory []*entity.UserInventory
-	for _, inv := range m.inventory {
-		if inv.UserID == userID {
-			userInventory = append(userInventory, inv)
-		}
-	}
-	return userInventory, nil
-}
-
 // Тесты
 func TestUserUseCase_SendCoins(t *testing.T) {
-	repo := NewMockRepository()
+	repo := mocks.NewMockUserRepository()
 	uc := NewUserUseCase(repo)
 	ctx := context.Background()
 
@@ -177,7 +76,7 @@ func TestUserUseCase_SendCoins(t *testing.T) {
 }
 
 func TestUserUseCase_BuyMerch(t *testing.T) {
-	repo := NewMockRepository()
+	repo := mock.NewMockRepository()
 	uc := NewUserUseCase(repo)
 	ctx := context.Background()
 
