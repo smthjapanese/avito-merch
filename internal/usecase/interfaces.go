@@ -29,7 +29,6 @@ type (
 type User interface {
 	Register(ctx context.Context, username, password string) error
 	Login(ctx context.Context, username, password string) (string, error)
-	GetInfo(ctx context.Context, userID int64) (*entity.InfoResponse, error)
 	SendCoins(ctx context.Context, fromUserID int64, toUser string, amount int64) error
 	BuyMerch(ctx context.Context, userID int64, merchName string) error
 	BeginTx(ctx context.Context) (Transaction, error)
@@ -54,4 +53,31 @@ type Transaction interface {
 	CreateTransaction(ctx context.Context, tr *entity.Transaction) error
 	Commit() error
 	Rollback() error
+}
+type DBTransactor interface {
+	WithinTransaction(ctx context.Context, fn func(ctx context.Context) error) error
+}
+
+type TransactionRepository interface {
+	Create(ctx context.Context, tr entity.Transaction) error
+	GetByUserID(ctx context.Context, userID int64) ([]entity.Transaction, error)
+}
+
+type MerchRepository interface {
+	List(ctx context.Context) ([]entity.MerchItem, error)
+	GetByID(ctx context.Context, id int64) (entity.MerchItem, error)
+	GetByName(ctx context.Context, name string) (entity.MerchItem, error)
+}
+
+type InventoryRepository interface {
+	GetByUserID(ctx context.Context, userID int64) ([]entity.UserInventory, error)
+	Update(ctx context.Context, inventory entity.UserInventory) error
+	Create(ctx context.Context, inventory entity.UserInventory) error
+}
+
+type UserRepository interface {
+	Create(ctx context.Context, user *entity.User) error
+	GetByID(ctx context.Context, id int64) (*entity.User, error)
+	GetByUsername(ctx context.Context, username string) (*entity.User, error)
+	Update(ctx context.Context, user *entity.User) error
 }

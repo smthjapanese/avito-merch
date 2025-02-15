@@ -208,21 +208,6 @@ func (mr *MockUserMockRecorder) BuyMerch(ctx, userID, merchName interface{}) *go
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "BuyMerch", reflect.TypeOf((*MockUser)(nil).BuyMerch), ctx, userID, merchName)
 }
 
-// GetInfo mocks base method.
-func (m *MockUser) GetInfo(ctx context.Context, userID int64) (*entity.InfoResponse, error) {
-	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "GetInfo", ctx, userID)
-	ret0, _ := ret[0].(*entity.InfoResponse)
-	ret1, _ := ret[1].(error)
-	return ret0, ret1
-}
-
-// GetInfo indicates an expected call of GetInfo.
-func (mr *MockUserMockRecorder) GetInfo(ctx, userID interface{}) *gomock.Call {
-	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "GetInfo", reflect.TypeOf((*MockUser)(nil).GetInfo), ctx, userID)
-}
-
 // Login mocks base method.
 func (m *MockUser) Login(ctx context.Context, username, password string) (string, error) {
 	m.ctrl.T.Helper()

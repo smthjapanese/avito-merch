@@ -5,8 +5,8 @@ import (
 	"fmt"
 	"github.com/smthjapanese/avito-merch/config"
 	v1 "github.com/smthjapanese/avito-merch/internal/controller/http/v1"
+	"github.com/smthjapanese/avito-merch/internal/repository"
 	"github.com/smthjapanese/avito-merch/internal/usecase"
-	"github.com/smthjapanese/avito-merch/internal/usecase/repo"
 	"github.com/smthjapanese/avito-merch/internal/usecase/webapi"
 	"github.com/smthjapanese/avito-merch/pkg/httpserver"
 	"github.com/smthjapanese/avito-merch/pkg/logger"
@@ -31,7 +31,7 @@ func Run(cfg *config.Config) {
 
 	// Use case
 	translationUseCase := usecase.New(
-		repo.New(pg),
+		repository.New(pg),
 		webapi.New(),
 	)
 

@@ -3,7 +3,7 @@ package entity
 import "time"
 
 const (
-	InitialBalance = 1000
+	InitialBalance int64 = 1000
 )
 
 type User struct {
