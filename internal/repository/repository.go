@@ -25,10 +25,3 @@ type InventoryRepository interface {
 	Update(ctx context.Context, inventory entity.UserInventory) error
 	Create(ctx context.Context, inventory entity.UserInventory) error
 }
-
-type UserRepository interface {
-	Create(ctx context.Context, user *entity.User) error
-	GetByID(ctx context.Context, id int64) (*entity.User, error)
-	GetByUsername(ctx context.Context, username string) (*entity.User, error)
-	Update(ctx context.Context, user *entity.User) error
-}

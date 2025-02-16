@@ -3,19 +3,18 @@ package transaction_usecase
 import (
 	"context"
 	"github.com/smthjapanese/avito-merch/internal/entity"
-	"github.com/smthjapanese/avito-merch/internal/repository"
 )
 
 type TransactionUC struct {
-	userRepo repository.UserRepository
-	txRepo   repository.TransactionRepository
-	dbTx     repository.DBTransactor
+	userRepo UserRepository
+	txRepo   Repository
+	dbTx     DBTransactor
 }
 
 func NewTransactionUC(
-	userRepo repository.UserRepository,
-	txRepo repository.TransactionRepository,
-	dbTx repository.DBTransactor,
+	userRepo UserRepository,
+	txRepo Repository,
+	dbTx DBTransactor,
 ) *TransactionUC {
 	return &TransactionUC{
 		userRepo: userRepo,
@@ -25,13 +24,13 @@ func NewTransactionUC(
 }
 
 func (uc *TransactionUC) CreateTransfer(ctx context.Context, fromUserID, toUserID int64, amount int64) error {
+	// Validation errors return as is
 	if amount <= 0 {
 		return entity.ErrNegativeAmount
 	}
 
-	// Wrap entire transfer in a transaction
+	// Technical errors wrapped in ErrTransactionFailed
 	err := uc.dbTx.WithinTransaction(ctx, func(ctx context.Context) error {
-		// Get sender with lock for update
 		fromUser, err := uc.userRepo.GetByID(ctx, fromUserID)
 		if err != nil {
 			return err
@@ -40,7 +39,6 @@ func (uc *TransactionUC) CreateTransfer(ctx context.Context, fromUserID, toUserI
 			return entity.ErrUserNotFound
 		}
 
-		// Get recipient with lock for update
 		toUser, err := uc.userRepo.GetByID(ctx, toUserID)
 		if err != nil {
 			return err
@@ -49,7 +47,7 @@ func (uc *TransactionUC) CreateTransfer(ctx context.Context, fromUserID, toUserI
 			return entity.ErrUserNotFound
 		}
 
-		// Check sufficient funds
+		// Business validation returns specific errors
 		if fromUser.Coins < amount {
 			return entity.ErrInsufficientFunds
 		}
@@ -58,7 +56,6 @@ func (uc *TransactionUC) CreateTransfer(ctx context.Context, fromUserID, toUserI
 		fromUser.Coins -= amount
 		toUser.Coins += amount
 
-		// Update users
 		if err := uc.userRepo.Update(ctx, fromUser); err != nil {
 			return err
 		}
@@ -66,7 +63,6 @@ func (uc *TransactionUC) CreateTransfer(ctx context.Context, fromUserID, toUserI
 			return err
 		}
 
-		// Create transaction record
 		tx := entity.Transaction{
 			FromUserID: fromUserID,
 			ToUserID:   toUserID,
@@ -81,15 +77,20 @@ func (uc *TransactionUC) CreateTransfer(ctx context.Context, fromUserID, toUserI
 		return nil
 	})
 
+	// Wrap technical errors, but pass through validation errors
 	if err != nil {
-		return entity.ErrTransactionFailed
+		switch err {
+		case entity.ErrInsufficientFunds, entity.ErrNegativeAmount:
+			return err
+		default:
+			return entity.ErrTransactionFailed
+		}
 	}
 
 	return nil
 }
 
 func (uc *TransactionUC) GetUserHistory(ctx context.Context, userID int64) (*TransactionHistory, error) {
-	// Verify user exists
 	user, err := uc.userRepo.GetByID(ctx, userID)
 	if err != nil {
 		return nil, err
@@ -98,7 +99,6 @@ func (uc *TransactionUC) GetUserHistory(ctx context.Context, userID int64) (*Tra
 		return nil, entity.ErrUserNotFound
 	}
 
-	// Get all transactions for user
 	transactions, err := uc.txRepo.GetByUserID(ctx, userID)
 	if err != nil {
 		return nil, err
@@ -107,7 +107,6 @@ func (uc *TransactionUC) GetUserHistory(ctx context.Context, userID int64) (*Tra
 	received := make([]TransactionInfo, 0)
 	sent := make([]TransactionInfo, 0)
 
-	// Process transactions
 	for _, tx := range transactions {
 		var info TransactionInfo
 		var otherUserName string
