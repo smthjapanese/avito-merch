@@ -35,7 +35,6 @@ func (uc *UserUseCase) Register(ctx context.Context, username, password string) 
 		return "", entity.ErrUserAlreadyExists
 	}
 
-	// Hash password
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(password), bcrypt.DefaultCost)
 	if err != nil {
 		return "", err
@@ -57,7 +56,6 @@ func (uc *UserUseCase) Register(ctx context.Context, username, password string) 
 }
 
 func (uc *UserUseCase) GetProfile(ctx context.Context, userID int64) (UserProfileDTO, error) {
-	// Get user info
 	user, err := uc.userRepo.GetByID(ctx, userID)
 	if err != nil {
 		return UserProfileDTO{}, err
@@ -71,13 +69,11 @@ func (uc *UserUseCase) GetProfile(ctx context.Context, userID int64) (UserProfil
 		return UserProfileDTO{}, err
 	}
 
-	// Get transaction history
 	transactions, err := uc.txRepo.GetByUserID(ctx, userID)
 	if err != nil {
 		return UserProfileDTO{}, err
 	}
 
-	// Convert inventory to DTO
 	inventoryDTO := make([]InventoryItemDTO, 0, len(inventory))
 	for _, item := range inventory {
 		merchItem, err := uc.merchRepo.GetByID(ctx, item.ItemID)
@@ -106,8 +102,6 @@ func (uc *UserUseCase) GetProfile(ctx context.Context, userID int64) (UserProfil
 	}, nil
 }
 
-// Helper functions
-
 func generateDummyToken(userID int64, username string) string {
 	return fmt.Sprintf("dummy_token_%d_%s", userID, username)
 }
@@ -121,7 +115,6 @@ func (uc *UserUseCase) processTransactionHistory(ctx context.Context, transactio
 		var otherUserName string
 
 		if tx.ToUserID == userID {
-			// Received transaction
 			fromUser, err := uc.userRepo.GetByID(ctx, tx.FromUserID)
 			if err != nil {
 				continue
@@ -136,7 +129,6 @@ func (uc *UserUseCase) processTransactionHistory(ctx context.Context, transactio
 			}
 			received = append(received, info)
 		} else {
-			// Sent transaction
 			toUser, err := uc.userRepo.GetByID(ctx, tx.ToUserID)
 			if err != nil {
 				continue
@@ -152,7 +144,6 @@ func (uc *UserUseCase) processTransactionHistory(ctx context.Context, transactio
 			sent = append(sent, info)
 		}
 
-		// Add item name for purchase transactions
 		if tx.Type == entity.TransactionTypePurchase && tx.ItemID != nil {
 			merchItem, err := uc.merchRepo.GetByID(ctx, *tx.ItemID)
 			if err == nil {

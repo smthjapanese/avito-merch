@@ -24,12 +24,10 @@ func NewTransactionUC(
 }
 
 func (uc *TransactionUC) CreateTransfer(ctx context.Context, fromUserID, toUserID int64, amount int64) error {
-	// Validation errors return as is
 	if amount <= 0 {
 		return entity.ErrNegativeAmount
 	}
 
-	// Technical errors wrapped in ErrTransactionFailed
 	err := uc.dbTx.WithinTransaction(ctx, func(ctx context.Context) error {
 		fromUser, err := uc.userRepo.GetByID(ctx, fromUserID)
 		if err != nil {
@@ -47,12 +45,10 @@ func (uc *TransactionUC) CreateTransfer(ctx context.Context, fromUserID, toUserI
 			return entity.ErrUserNotFound
 		}
 
-		// Business validation returns specific errors
 		if fromUser.Coins < amount {
 			return entity.ErrInsufficientFunds
 		}
 
-		// Update balances
 		fromUser.Coins -= amount
 		toUser.Coins += amount
 
@@ -77,7 +73,6 @@ func (uc *TransactionUC) CreateTransfer(ctx context.Context, fromUserID, toUserI
 		return nil
 	})
 
-	// Wrap technical errors, but pass through validation errors
 	if err != nil {
 		switch err {
 		case entity.ErrInsufficientFunds, entity.ErrNegativeAmount:
@@ -112,10 +107,9 @@ func (uc *TransactionUC) GetUserHistory(ctx context.Context, userID int64) (*Tra
 		var otherUserName string
 
 		if tx.ToUserID == userID {
-			// Received transaction
 			fromUser, err := uc.userRepo.GetByID(ctx, tx.FromUserID)
 			if err != nil {
-				continue // Skip if user not found
+				continue
 			}
 			otherUserName = fromUser.Username
 			info = TransactionInfo{
@@ -127,10 +121,9 @@ func (uc *TransactionUC) GetUserHistory(ctx context.Context, userID int64) (*Tra
 			}
 			received = append(received, info)
 		} else {
-			// Sent transaction
 			toUser, err := uc.userRepo.GetByID(ctx, tx.ToUserID)
 			if err != nil {
-				continue // Skip if user not found
+				continue
 			}
 			otherUserName = toUser.Username
 			info = TransactionInfo{

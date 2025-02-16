@@ -49,30 +49,25 @@ func (uc *MerchUseCase) ListAvailable(ctx context.Context) ([]MerchItemDTO, erro
 
 func (uc *MerchUseCase) BuyItem(ctx context.Context, userID int64, itemName string) error {
 	return uc.dbTransactor.WithinTransaction(ctx, func(ctx context.Context) error {
-		// Get merch item
 		item, err := uc.merchRepo.GetByName(ctx, itemName)
 		if err != nil {
 			return entity.ErrMerchNotFound
 		}
 
-		// Get user
 		user, err := uc.userRepo.GetByID(ctx, userID)
 		if err != nil {
 			return entity.ErrUserNotFound
 		}
 
-		// Check if user has enough coins
 		if user.Coins < item.Price {
 			return entity.ErrInsufficientFunds
 		}
 
-		// Update user balance
 		user.Coins -= item.Price
 		if err := uc.userRepo.Update(ctx, user); err != nil {
 			return err
 		}
 
-		// Create or update inventory record
 		inventory, err := uc.invRepo.GetByUserID(ctx, userID)
 		var found bool
 		for i := range inventory {
@@ -98,7 +93,6 @@ func (uc *MerchUseCase) BuyItem(ctx context.Context, userID int64, itemName stri
 			}
 		}
 
-		// Create transaction record
 		transaction := entity.Transaction{
 			FromUserID: userID,
 			ToUserID:   userID, // self-transaction for purchase

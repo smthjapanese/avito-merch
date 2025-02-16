@@ -9,7 +9,6 @@ import (
 	"github.com/smthjapanese/avito-merch/internal/entity"
 )
 
-// dbConn is an interface that both *sqlx.DB and *sqlx.Tx satisfy
 type dbConn interface {
 	SelectContext(ctx context.Context, dest interface{}, query string, args ...interface{}) error
 	GetContext(ctx context.Context, dest interface{}, query string, args ...interface{}) error
@@ -25,14 +24,12 @@ func NewMerchRepository(db *sqlx.DB) *MerchRepository {
 	}
 }
 
-// WithTx returns a new MerchRepository that uses the transaction
 func (r *MerchRepository) WithTx(tx *sqlx.Tx) *MerchRepository {
 	return &MerchRepository{
 		db: tx,
 	}
 }
 
-// List returns all available merch items
 func (r *MerchRepository) List(ctx context.Context) ([]entity.MerchItem, error) {
 	var items []entity.MerchItem
 	query := `
@@ -48,7 +45,6 @@ func (r *MerchRepository) List(ctx context.Context) ([]entity.MerchItem, error) 
 	return items, nil
 }
 
-// GetByID retrieves a merch item by its ID
 func (r *MerchRepository) GetByID(ctx context.Context, id int64) (entity.MerchItem, error) {
 	var item entity.MerchItem
 	query := `
@@ -67,7 +63,6 @@ func (r *MerchRepository) GetByID(ctx context.Context, id int64) (entity.MerchIt
 	return item, nil
 }
 
-// GetByName retrieves a merch item by its name
 func (r *MerchRepository) GetByName(ctx context.Context, name string) (entity.MerchItem, error) {
 	var item entity.MerchItem
 	query := `

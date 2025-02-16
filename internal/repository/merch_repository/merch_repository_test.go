@@ -75,7 +75,6 @@ func (s *MerchRepositoryTestSuite) TestList() {
 		s.NoError(err)
 	}
 
-	// Test listing
 	items, err := s.repo.List(ctx)
 	s.NoError(err)
 	s.Len(items, 2)
@@ -86,7 +85,6 @@ func (s *MerchRepositoryTestSuite) TestList() {
 func (s *MerchRepositoryTestSuite) TestGetByID() {
 	ctx := context.Background()
 
-	// Insert test item
 	testItem := entity.MerchItem{
 		Name:      "TestItem",
 		Price:     100,
@@ -161,19 +159,16 @@ func (s *MerchRepositoryTestSuite) TestTransaction() {
 		s.NoError(err)
 		initialCount := len(items)
 
-		// Insert test data within transaction
 		_, err = tx.Exec(`
             INSERT INTO merch_items (name, price, created_at)
             VALUES ($1, $2, $3)
         `, "TxItem", 100, time.Now().UTC())
 		s.NoError(err)
 
-		// Check item is visible within transaction
 		items, err = txRepo.List(ctx)
 		s.NoError(err)
 		s.Equal(initialCount+1, len(items))
 
-		// Check item is not visible outside transaction
 		itemsOutside, err := s.repo.List(ctx)
 		s.NoError(err)
 		s.Equal(initialCount, len(itemsOutside))
@@ -181,7 +176,6 @@ func (s *MerchRepositoryTestSuite) TestTransaction() {
 		err = tx.Commit()
 		s.NoError(err)
 
-		// Verify item persists after commit
 		items, err = s.repo.List(ctx)
 		s.NoError(err)
 		s.Equal(initialCount+1, len(items))
@@ -197,14 +191,12 @@ func (s *MerchRepositoryTestSuite) TestTransaction() {
 		s.NoError(err)
 		initialCount := len(items)
 
-		// Insert test data within transaction
 		_, err = tx.Exec(`
             INSERT INTO merch_items (name, price, created_at)
             VALUES ($1, $2, $3)
         `, "RollbackItem", 100, time.Now().UTC())
 		s.NoError(err)
 
-		// Check item is visible within transaction
 		items, err = txRepo.List(ctx)
 		s.NoError(err)
 		s.Equal(initialCount+1, len(items))
@@ -212,45 +204,37 @@ func (s *MerchRepositoryTestSuite) TestTransaction() {
 		err = tx.Rollback()
 		s.NoError(err)
 
-		// Verify item doesn't exist after rollback
 		items, err = s.repo.List(ctx)
 		s.NoError(err)
 		s.Equal(initialCount, len(items))
 	})
 
 	s.Run("transaction isolation", func() {
-		// Start first transaction
 		tx1, err := s.db.BeginTxx(ctx, nil)
 		s.NoError(err)
 		txRepo1 := s.repo.WithTx(tx1)
 
-		// Start second transaction
 		tx2, err := s.db.BeginTxx(ctx, nil)
 		s.NoError(err)
 		txRepo2 := s.repo.WithTx(tx2)
 
-		// Insert item in first transaction
 		_, err = tx1.Exec(`
             INSERT INTO merch_items (name, price, created_at)
             VALUES ($1, $2, $3)
         `, "IsolationItem", 100, time.Now().UTC())
 		s.NoError(err)
 
-		// Check item is visible in first transaction
 		items1, err := txRepo1.List(ctx)
 		s.NoError(err)
 		count1 := len(items1)
 
-		// Check item is not visible in second transaction
 		items2, err := txRepo2.List(ctx)
 		s.NoError(err)
 		s.Equal(count1-1, len(items2))
 
-		// Commit first transaction
 		err = tx1.Commit()
 		s.NoError(err)
 
-		// Now item should be visible in second transaction
 		items2, err = txRepo2.List(ctx)
 		s.NoError(err)
 		s.Equal(count1, len(items2))

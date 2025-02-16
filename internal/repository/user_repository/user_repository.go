@@ -10,7 +10,6 @@ import (
 	"github.com/smthjapanese/avito-merch/internal/entity"
 )
 
-// dbConn is an interface that both *sqlx.DB and *sqlx.Tx satisfy
 type dbConn interface {
 	GetContext(ctx context.Context, dest interface{}, query string, args ...interface{}) error
 	QueryRowContext(ctx context.Context, query string, args ...interface{}) *sql.Row
@@ -27,14 +26,12 @@ func NewUserRepository(db *sqlx.DB) *UserRepository {
 	}
 }
 
-// WithTx returns a new UserRepository that uses the transaction
 func (r *UserRepository) WithTx(tx *sqlx.Tx) *UserRepository {
 	return &UserRepository{
 		db: tx,
 	}
 }
 
-// Create inserts a new user into the database
 func (r *UserRepository) Create(ctx context.Context, user *entity.User) error {
 	query := `
   INSERT INTO users (username, password_hash, coins, created_at)
@@ -60,7 +57,6 @@ func (r *UserRepository) Create(ctx context.Context, user *entity.User) error {
 	return nil
 }
 
-// GetByID retrieves a user by their ID
 func (r *UserRepository) GetByID(ctx context.Context, id int64) (*entity.User, error) {
 	var user entity.User
 	query := `
@@ -79,7 +75,6 @@ func (r *UserRepository) GetByID(ctx context.Context, id int64) (*entity.User, e
 	return &user, nil
 }
 
-// GetByUsername retrieves a user by their username
 func (r *UserRepository) GetByUsername(ctx context.Context, username string) (*entity.User, error) {
 	var user entity.User
 	query := `
@@ -98,7 +93,6 @@ func (r *UserRepository) GetByUsername(ctx context.Context, username string) (*e
 	return &user, nil
 }
 
-// Update updates an existing user in the database
 func (r *UserRepository) Update(ctx context.Context, user *entity.User) error {
 	query := `
   UPDATE users
@@ -134,7 +128,6 @@ func (r *UserRepository) Update(ctx context.Context, user *entity.User) error {
 	return nil
 }
 
-// isUniqueViolation checks if the error is a unique constraint violation
 func isUniqueViolation(err error) bool {
 	var pqErr *pq.Error
 	if errors.As(err, &pqErr) {

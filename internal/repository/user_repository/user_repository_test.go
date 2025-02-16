@@ -36,12 +36,10 @@ func (s *UserRepositoryTestSuite) SetupSuite() {
 	s.db = db
 	s.repo = NewUserRepository(db)
 
-	// Создаем таблицу
 	s.recreateTable()
 }
 
 func (s *UserRepositoryTestSuite) SetupTest() {
-	// Очищаем таблицу перед каждым тестом
 	_, err := s.db.Exec("TRUNCATE TABLE users RESTART IDENTITY")
 	require.NoError(s.T(), err)
 }
@@ -96,7 +94,6 @@ func (s *UserRepositoryTestSuite) TestCreateUser() {
 func (s *UserRepositoryTestSuite) TestGetByID() {
 	ctx := context.Background()
 
-	// Создаем тестового пользователя
 	user := &entity.User{
 		Username:     "testuser",
 		PasswordHash: "hashed_password",
